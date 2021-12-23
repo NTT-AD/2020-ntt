@@ -1,16 +1,15 @@
 #!/bin/sh
 
-IFS="
-"
+OUTPUT_DIR=$1
 
-for i in `cat 2020NTT_redirect.txt | sed 's%https://2020.ntt/%%g' | grep -v "html "`
-do
-	[ -d html/${i%% *} ] || mkdir -p html/${i%% *}
-	cat source.html | sed "s%TO%${i##* }%" > html/${i%% *}index.html
+cat 2020NTT_redirect.txt | sed 's%https://2020.ntt/%%g' | grep -v "html " | \
+while IFS=" " read FROM TO; do
+	[ -d $OUTPUT_DIR/$FROM ] || mkdir -p $OUTPUT_DIR/$FROM
+	cat source.html | sed "s%TO%${TO}%" > $OUTPUT_DIR/${FROM}index.html
 done
 
-for i in `cat 2020NTT_redirect.txt | sed 's%https://2020.ntt/%%g' | grep "html "`
-do
-	[ -d `dirname html/${i%% *}` ] || mkdir -p html/`dirname ${i%% *}`
-	cat source.html | sed "s%TO%${i##* }%" > html/${i%% *}
+cat 2020NTT_redirect.txt | sed 's%https://2020.ntt/%%g' | grep "html " | \
+while IFS=" " read FROM TO; do
+	[ -d `dirname $OUTPUT_DIR/$FROM` ] || mkdir -p `dirname $OUTPUT_DIR/$FROM`
+	cat source.html | sed "s%TO%${TO}%" > $OUTPUT_DIR/${FROM}
 done

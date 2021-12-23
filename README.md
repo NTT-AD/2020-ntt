@@ -6,5 +6,4 @@
 
 ``````
 $ git worktree html
-$ ./make_html
-``````
+$ ./make_html html
