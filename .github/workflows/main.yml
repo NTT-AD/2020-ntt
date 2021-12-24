@@ -1,0 +1,27 @@
+name: website
+
+on: push
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+      -
+        name: Gen page
+        run: |
+          mkdir public
+          ./make_html.sh public
+          rsync -rv static/ public/
+      -
+        name: Deploy to GitHub Pages
+        if: success()
+        uses: crazy-max/ghaction-github-pages@v2
+        with:
+          target_branch: gh-pages
+          build_dir: public
+          fqdn: 2020.ntt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
