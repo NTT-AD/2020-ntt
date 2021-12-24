@@ -1,5 +1,12 @@
 #!/bin/sh
 
-while IFS=" " read from to; do
-echo $from "---->" `curl -k -s "$from" | grep -o 'URL=.*' | tr -d 'URL=*">'`
-done < 2020NTT_redirect.txt
+cat 2020NTT_redirect.txt | while IFS=" " read FROM TO; do
+	printf "check... ${FROM} "
+	curl -s ${FROM} | grep -w -q $TO
+	if [ "$?" -ne 0 ]; then
+		printf "ERROR!"
+		exit 1
+	fi
+	printf "OK"
+	echo
+done
