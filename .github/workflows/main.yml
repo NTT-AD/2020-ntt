@@ -1,4 +1,4 @@
-name: website
+name: build-txt-2-html
 
 on: push
 
